@@ -1,6 +1,5 @@
 import Button from "@/components/ui/Button";
 import { container } from "@/constants/tailwind_customizations";
-import theme from "@/constants/theme";
 import React from "react";
 
 const Header = () => {
