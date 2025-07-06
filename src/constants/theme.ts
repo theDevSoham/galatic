@@ -7,6 +7,7 @@ const theme = {
   alternateBackground: "#f1f5f9",
   defaultText: "#000",
   accentText: "#54595F",
+  accentBackground: "#abb8c3",
 };
 
 export default theme;

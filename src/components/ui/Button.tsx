@@ -30,7 +30,9 @@ type IButtonProps =
   | (IButtonBase &
       ButtonAction & { type: "primary" | "default" | "buttonLink" })
   | (IButtonBase &
-      WithPredefined & { type: "link" | "linkButton" | "icon"; link: string });
+      WithPredefined & { type: "link" | "linkButton"; link: string })
+  | (IButtonBase &
+      (WithClick | WithPredefined) & { type: "icon"; link?: string });
 
 const Button: React.FC<IButtonProps> = (props) => {
   const { type, label } = props;
@@ -95,25 +97,29 @@ const Button: React.FC<IButtonProps> = (props) => {
       );
 
     case "icon":
-      if (props?.predefinedInteraction) {
-        return (
-          <button
-            onClick={clientSideInteractions[props.predefinedInteraction]}
-            className="flex items-center justify-center w-10 h-10 rounded-full bg-[#6000cd] hover:bg-[#9b51e0] transition duration-200 text-white cursor-pointer"
-            aria-label="Icon button"
-          >
-            {label}
-          </button>
-        );
-      }
       return (
-        <a
-          href={props.link}
-          className="flex items-center justify-center w-10 h-10 rounded-full bg-[#6000cd] hover:bg-[#9b51e0] transition duration-200 text-white"
+        <button
+          onClick={
+            "predefinedInteraction" in props && props.predefinedInteraction
+              ? clientSideInteractions[props.predefinedInteraction]
+              : "onClick" in props
+              ? props.onClick
+              : undefined
+          }
+          className="flex items-center justify-center w-10 h-10 rounded-full bg-[#6000cd] hover:bg-[#9b51e0] transition duration-200 text-white cursor-pointer"
           aria-label="Icon button"
         >
-          {label}
-        </a>
+          {props.link ? (
+            <a
+              href={props.link}
+              className="w-full h-full flex items-center justify-center"
+            >
+              {label}
+            </a>
+          ) : (
+            label
+          )}
+        </button>
       );
 
     default:
